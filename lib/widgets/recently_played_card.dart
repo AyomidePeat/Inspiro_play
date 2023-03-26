@@ -21,7 +21,7 @@ class RecentlyPlayedCard extends StatelessWidget {
             width: 120,
             // margin: EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Colors.grey,
               borderRadius: BorderRadius.circular(15),
               image: DecorationImage(
                 image: NetworkImage(imageUrl),

@@ -1,10 +1,9 @@
-
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:inspiro_play/screens/model/song.api.dart';
 import 'package:inspiro_play/screens/model/song_model.dart';
 import 'package:inspiro_play/widgets/default_music_card.dart';
+import 'package:inspiro_play/widgets/genere_card.dart';
 import 'package:inspiro_play/widgets/long_music_card.dart';
 
 class DiscoverScreen extends StatefulWidget {
@@ -16,8 +15,31 @@ class DiscoverScreen extends StatefulWidget {
 
 class _DiscoverScreenState extends State<DiscoverScreen> {
   List<Song> songs = [];
+  List genres = [
+    'Classical',
+    'Pop',
+    'Jazz',
+    'Rock',
+    'Hip-hop',
+    'Blues',
+    'Country',
+    'Karoke'
+  ];
+  List imageUrl = [
+    "https://t.scdn.co/images/728ed47fc1674feb95f7ac20236eb6d7.jpeg",
+    "https://i.scdn.co/image/ab67706c0000da84121aa0838c964a931587d535",
+    "https://i.scdn.co/image/ab67706f000000025ea54b91b073c2776b966e7",
+    "https://i.scdn.co/image/ab67706f00000002c80d206d12633e1bd848440d",
+    "https://i.scdn.co/image/ab67706c0000da842f2a2f4b44bc5737585c9558",
+    "https://i.scdn.co/image/ab67706f00000002e8d2d867e32fdaa12aa79d57",
+    "https://i.scdn.co/image/ab67706f00000002e5f5faf5b929c733c8a1b824",
+    "https://i.scdn.co/image/ab67706c0000da846b92e44ac1af9d8b46668d14"
+
+  ];
   bool isLoading = true;
   String errorMessage = '';
+  SongApi songApi = SongApi();
+
   Future<void> getSongs() async {
     try {
       final apiSongs = await SongApi.getSong();
@@ -28,8 +50,8 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     } catch (e) {
       setState(() {
         isLoading = false;
-         errorMessage =e.toString();
-         print(errorMessage);
+        errorMessage = e.toString();
+        print(errorMessage);
       });
     }
   }
@@ -57,102 +79,106 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   fontFamily: 'Rubik')),
         ),
         body: isLoading
-            ?const Center(child: CircularProgressIndicator())
-          :errorMessage.isNotEmpty? Center(child:Text(errorMessage, style:TextStyle(color:Colors.red))) : ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height,
-                ),
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextFieldWidget(),
-                        const SizedBox(height: 25),
-                        const Text("Perfect for you",
-                            style: TextStyle(
-                                fontSize: 23,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Rubik')),
-                        const SizedBox(height: 25),
-                        ConstrainedBox(
-                          constraints:const BoxConstraints(
-                            maxHeight: 180,
-                          ),
-                          child: GridView.builder(
-                            physics: BouncingScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              mainAxisExtent: 130,
-                              crossAxisCount: 1,
-                            ),
-                            itemCount: songs.length,
-                            itemBuilder: (BuildContext context, int index) {
-                            
-                              return DefaultMusicCard(
-                                name: songs[index].name,
-                                imageUrl: songs[index].image,
-                              );
-                            },
-                          ),
-                        ),
-                        ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxHeight: 180,
-                          ),
-                          child: GridView.builder(
-                            physics: BouncingScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              mainAxisExtent: 310,
-                              crossAxisCount: 1,
-                            ),
-                            itemCount: songs.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return LongMusicCard(
-                                name: songs[index].name,
-                                imageUrl: songs[index].image,
-                              );
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 25),
-                        const Text("Popular Hits",
-                            style: TextStyle(
-                                fontSize: 23,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Rubik')),
-                        ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxHeight: 180,
-                          ),
-                          child: GridView.builder(
-                            physics: BouncingScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              mainAxisExtent: 130,
-                              crossAxisCount: 1,
-                            ),
-                            itemCount: songs.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return DefaultMusicCard(
-                                name: songs[index].name,
-                                imageUrl: songs[index].image,
-                              );
-                            },
-                          ),
-                        ),
-                      ],
+            ? const Center(child: CircularProgressIndicator())
+            : errorMessage.isNotEmpty
+                ? Center(
+                    child:
+                        Text(errorMessage, style: TextStyle(color: Colors.red)))
+                : ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height,
                     ),
-                  ),
-                ),
-              ));
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextFieldWidget(),
+                            const SizedBox(height: 25),
+                            const Text("Perfect for you",
+                                style: TextStyle(
+                                    fontSize: 23,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Rubik')),
+                            const SizedBox(height: 25),
+                            ConstrainedBox(
+                              constraints: const BoxConstraints(
+                                maxHeight: 180,
+                              ),
+                              child: GridView.builder(
+                                physics: BouncingScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  mainAxisExtent: 130,
+                                  crossAxisCount: 1,
+                                ),
+                                itemCount: genres.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return GenreCard(
+                                    name: genres[index],
+                                    imageUrl: imageUrl[index],
+                                  );
+                                },
+                              ),
+                            ),
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxHeight: 180,
+                              ),
+                              child: GridView.builder(
+                                physics: BouncingScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  mainAxisExtent: 310,
+                                  crossAxisCount: 1,
+                                ),
+                                itemCount: songs.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return LongMusicCard(
+                                    name: songs[index].name,
+                                    imageUrl: songs[index].image,
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 25),
+                            const Text("Popular Hits",
+                                style: TextStyle(
+                                    fontSize: 23,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Rubik')),
+                            const SizedBox(height: 25),
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxHeight: 180,
+                              ),
+                              child: GridView.builder(
+                                physics: BouncingScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  mainAxisExtent: 130,
+                                  crossAxisCount: 1,
+                                ),
+                                itemCount: songs.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return DefaultMusicCard(
+                                    name: songs[index].name,
+                                    imageUrl: songs[index].image,
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ));
   }
 }
 

@@ -12,12 +12,24 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   List<Song> songs = [];
-  bool isLoading = true;
+ bool isLoading = true;
+  String errorMessage = '';
+  SongApi songApi = SongApi();
+
   Future<void> getSongs() async {
-    songs = await SongApi.getSong();
-    setState(() {
-      isLoading = false;
-    });
+    try {
+      final apiSongs = await SongApi.getSong();
+      setState(() {
+        songs = apiSongs;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+        errorMessage = e.toString();
+        print(errorMessage);
+      });
+    }
   }
 
   void initState() {
@@ -25,7 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     getSongs();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +62,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Rubik')),
       ),
-      body: Padding(
+      body: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : errorMessage.isNotEmpty
+                ? Center(
+                    child:
+                        Text(errorMessage, style: TextStyle(color: Colors.red)))
+                :Padding(
         padding: const EdgeInsets.all(8.0),
         child: Center(
           child: Column(
@@ -89,17 +107,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(
                 height: 13,
               ),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Column( mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text('0',
                           style: TextStyle(
                               fontSize: 13,
-                              
                               color: Colors.grey,
                               fontFamily: 'Rubik')),
-                              const SizedBox(height:5),
+                      const SizedBox(height: 5),
                       Text('Fav. Songs',
                           style: TextStyle(
                               fontSize: 15,
@@ -108,15 +127,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               fontFamily: 'Rubik')),
                     ],
                   ),
-                  Column( mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text('0',
                           style: TextStyle(
                               fontSize: 13,
-                              
                               color: Colors.grey,
                               fontFamily: 'Rubik')),
-                              const SizedBox(height:5),
+                      const SizedBox(height: 5),
                       Text('Followers',
                           style: TextStyle(
                               fontSize: 15,
@@ -125,15 +144,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               fontFamily: 'Rubik')),
                     ],
                   ),
-                  Column( mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text('0',
                           style: TextStyle(
                               fontSize: 13,
-                              
                               color: Colors.grey,
                               fontFamily: 'Rubik')),
-                              const SizedBox(height:5),
+                      const SizedBox(height: 5),
                       Text('Following',
                           style: TextStyle(
                               fontSize: 15,
@@ -144,48 +163,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ],
               ),
-
-               const SizedBox(height: 20),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text("Top Daily Playlists",
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Rubik')),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text("Top Daily Playlists",
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Rubik')),
-                      Row( mainAxisSize: MainAxisSize.min,
-                        children: [
-                          TextButton(onPressed: () {}, child: Text("See all", style:TextStyle(color:Colors.grey[700], fontSize: 15, ))),
-                           Icon(Icons.arrow_forward_ios, color: Colors.grey[700], size:14)
-                        ],
-                      )
+                      TextButton(
+                          onPressed: () {},
+                          child: Text("See all",
+                              style: TextStyle(
+                                color: Colors.grey[700],
+                                fontSize: 15,
+                              ))),
+                      Icon(Icons.arrow_forward_ios,
+                          color: Colors.grey[700], size: 14)
                     ],
+                  )
+                ],
+              ),
+              const SizedBox(height: 15),
+              ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxHeight: 380,
+                ),
+                child: GridView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    mainAxisExtent: 70,
+                    crossAxisCount: 1,
                   ),
-                  const SizedBox(height: 15),
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxHeight: 380,
-                    ),
-                    child: GridView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        mainAxisExtent: 70,
-                        crossAxisCount: 1,
-                        
-                      ),
-                      itemCount: songs.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return DailyWidget(
-                          artist: songs[index].artist,
-                          name: songs[index].name, imageUrl: songs[index].image
-                        );
-                      },
-                    ),
-                  ),
+                  itemCount: songs.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return DailyWidget(
+                        artist: songs[index].artist,
+                        name: songs[index].name,
+                        imageUrl: songs[index].image);
+                  },
+                ),
+              ),
             ],
           ),
         ),

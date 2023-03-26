@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class DefaultMusicCard extends StatelessWidget {
+class GenreCard extends StatelessWidget {
   final String name;
   final String imageUrl;
-  const DefaultMusicCard({
+  const GenreCard({
     Key? key,
     required this.name,
     required this.imageUrl,

@@ -15,16 +15,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
-  Widget build(BuildContext context) {
-    List<Song> songs = [];
+  List<Song> songs = [];
     bool isLoading = true;
-    Future<void> getSongs() async {
-      songs = await SongApi.getSong();
+  
+   String errorMessage = '';
+ Future<void> getSongs() async {
+    try {
+      final apiSongs = await SongApi.getSong();
       setState(() {
+        songs = apiSongs;
         isLoading = false;
       });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+        errorMessage = e.toString();
+        print(errorMessage);
+      });
     }
+  }
 
     void initState() {
       super.initState();
@@ -44,8 +53,11 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
 
-    var greeting = _getGreeting(now.hour);
-
+   
+  @override
+  Widget build(BuildContext context) {
+    
+ var greeting = _getGreeting(now.hour);
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -60,7 +72,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Rubik')),
       ),
-      body: ConstrainedBox(
+      body: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : errorMessage.isNotEmpty
+                ? Center(
+                    child:
+                        Text(errorMessage, style: TextStyle(color: Colors.red)))
+                :ConstrainedBox(
         constraints: BoxConstraints(
           maxHeight: MediaQuery.of(context).size.height,
         ),
@@ -93,8 +111,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (BuildContext context, int index) {
                       Song song = songs[index];
                       return FollowedArtistWidget(
-                        name: songs[index].name, imageUrl: songs[index].image
-                      );
+                          name: songs[index].name,
+                          imageUrl: songs[index].image);
                     },
                   ),
                 ),
@@ -122,7 +140,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (BuildContext context, int index) {
                       return RecentlyPlayedCard(
                         artist: songs[index].artist,
-                      name:  songs[index].name,  imageUrl: songs[index].name, // imageUrl: "imageUrl"
+                        name: songs[index].name,
+                        imageUrl: songs[index].name, // imageUrl: "imageUrl"
                       );
                     },
                   ),
@@ -168,9 +187,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemCount: songs.length,
                     itemBuilder: (BuildContext context, int index) {
                       return DailyWidget(
-                        artist:  songs[index].artist,
-                         imageUrl: songs[index].image,
-                        name:songs[index].name, // imageUrl: "imageUrl"
+                        artist: songs[index].artist,
+                        imageUrl: songs[index].image,
+                        name: songs[index].name, // imageUrl: "imageUrl"
                       );
                     },
                   ),

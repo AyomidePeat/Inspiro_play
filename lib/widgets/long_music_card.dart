@@ -13,7 +13,7 @@ class LongMusicCard extends StatelessWidget {
             height: 120,
             width: 300,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Colors.grey,
               borderRadius: BorderRadius.circular(15),
               image: DecorationImage(
                 image: NetworkImage(imageUrl),
@@ -26,11 +26,12 @@ class LongMusicCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(name,
-                        style: const TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Rubik')),
+                    // Text(name,
+                    //     style: const TextStyle(
+                    //         fontSize: 30,
+                    //         color: Colors.white,
+                    //         fontWeight: FontWeight.bold,
+                    //         fontFamily: 'Rubik')),
                     const Text(
                       "Discover More",
                       style: TextStyle(fontSize: 14, fontFamily: 'Rubik'),
@@ -38,7 +39,7 @@ class LongMusicCard extends StatelessWidget {
                     Icon(Icons.arrow_forward_ios_sharp)
                   ],
                 ))),
-        // SizedBox(width:6),
+       
       ],
     );
   }
