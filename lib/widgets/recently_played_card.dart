@@ -31,7 +31,7 @@ class RecentlyPlayedCard extends StatelessWidget {
            
             ),
         const SizedBox(height: 5),
-        Text(name,
+        Text(name, maxLines: 1, 
             style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,

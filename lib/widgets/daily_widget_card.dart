@@ -29,15 +29,19 @@ class DailyWidget extends StatelessWidget {
                 ),
               )),
               const SizedBox(width:15),
-              Column(crossAxisAlignment: CrossAxisAlignment.center,
+              Column(crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                const   SizedBox(height:13),
-                  Text(name,
-                  style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                      fontFamily: 'Rubik')),
+                  SizedBox(width:100,
+                    child: Text(name,
+                    maxLines:1,softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                        fontFamily: 'Rubik')),
+                  ),
                   Text('By $artist',
                   style: const TextStyle(
                       fontSize: 10,
