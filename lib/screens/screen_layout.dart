@@ -32,7 +32,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
 
       case 2:
         return PlayingMusicScreen();
-    }
+    } 
     return ProfileScreen();
   }
 

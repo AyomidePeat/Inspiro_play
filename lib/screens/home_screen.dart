@@ -1,8 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:inspiro_play/screens/model/song.api.dart';
-import 'package:inspiro_play/screens/model/song_model.dart';
+import 'package:inspiro_play/model/song.api.dart';
+import 'package:inspiro_play/model/song_model.dart';
+
 import 'package:inspiro_play/widgets/daily_widget_card.dart';
 import 'package:inspiro_play/widgets/followed_artist_widget.dart';
 import 'package:inspiro_play/widgets/recently_played_card.dart';
@@ -101,15 +102,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-      final double topWidgetsHeight= size.height*0.51;
+      final double topWidgetsHeight= size.height*0.52;
     var greeting = _getGreeting(now.hour);
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         elevation: 0,
+        actions: [ CircleAvatar( foregroundImage:AssetImage("images/johndoe.jpg",), radius: 50),],
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
-        actions: const [CircleAvatar(/*backgroundImage:NetworkImage("")*/)],
+         
         centerTitle: false,
         title: Text(greeting,
             style: const TextStyle(
@@ -134,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           AnimatedContainer(
-                            duration: const Duration(milliseconds: 2000),
+                            duration: const Duration(milliseconds: 200),
                             width: size.width,
                             alignment: Alignment.topCenter,
                             height: closeTopWidgets?0:topWidgetsHeight,
@@ -153,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     maxHeight: 100,
                                   ),
                                   child: GridView.builder(
-                                    controller:  scrollController1,
+                                    controller:  scrollController,
                                     physics: const BouncingScrollPhysics(),
                                     scrollDirection: Axis.horizontal,
                                     gridDelegate:
@@ -184,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     maxHeight: 200,
                                   ),
                                   child: GridView.builder(
-                                    controller:  scrollController,
+                                   controller:  scrollController1,
                                     physics: const BouncingScrollPhysics(),
                                     scrollDirection: Axis.horizontal,
                                     gridDelegate:
@@ -234,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     )
                                   ],
                                 ),
-                               // const SizedBox(height: 15),
+                                const SizedBox(height: 15),
                           ConstrainedBox(
                             constraints: BoxConstraints(
                               maxHeight: size.height,

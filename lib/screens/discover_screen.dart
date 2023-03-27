@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:inspiro_play/screens/model/song.api.dart';
-import 'package:inspiro_play/screens/model/song_model.dart';
+import 'package:inspiro_play/model/song.api.dart';
+import 'package:inspiro_play/model/song_model.dart';
 import 'package:inspiro_play/widgets/default_music_card.dart';
 import 'package:inspiro_play/widgets/genere_card.dart';
 import 'package:inspiro_play/widgets/long_music_card.dart';
@@ -15,6 +15,7 @@ class DiscoverScreen extends StatefulWidget {
 
 class _DiscoverScreenState extends State<DiscoverScreen> {
   List<Song> songs = [];
+  List<PlaylistTrack> playlistTracks = [];
   List genres = [
     'Classical',
     'Pop',
@@ -34,7 +35,6 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     "https://i.scdn.co/image/ab67706f00000002e8d2d867e32fdaa12aa79d57",
     "https://i.scdn.co/image/ab67706f00000002e5f5faf5b929c733c8a1b824",
     "https://i.scdn.co/image/ab67706c0000da846b92e44ac1af9d8b46668d14"
-
   ];
   bool isLoading = true;
   String errorMessage = '';
@@ -56,10 +56,27 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
     }
   }
 
+  Future<void> getPlaylistTrack() async {
+    try {
+      final apiPlaylistTrack = await SongApi.getPlaylistTracks();
+      setState(() {
+        playlistTracks = apiPlaylistTrack;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+        errorMessage = e.toString();
+        print(errorMessage);
+      });
+    }
+  }
+
   void initState() {
     super.initState();
 
     getSongs();
+    getPlaylistTrack();
   }
 
   @override
@@ -70,7 +87,13 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           elevation: 0,
           automaticallyImplyLeading: false,
           backgroundColor: Colors.transparent,
-          actions: const [CircleAvatar(/*backgroundImage:NetworkImage("")*/)],
+          actions: const [
+            CircleAvatar(
+                foregroundImage: AssetImage(
+                  "images/johndoe.jpg",
+                ),
+                radius: 50)
+          ],
           centerTitle: true,
           title: const Text("Discover",
               style: TextStyle(
@@ -136,11 +159,11 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                                   mainAxisExtent: 310,
                                   crossAxisCount: 1,
                                 ),
-                                itemCount: songs.length,
+                                itemCount: playlistTracks.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return LongMusicCard(
-                                    name: songs[index].name,
-                                    imageUrl: songs[index].image,
+                                    name:playlistTracks[index].name,
+                                    imageUrl: playlistTracks[index].image,
                                   );
                                 },
                               ),

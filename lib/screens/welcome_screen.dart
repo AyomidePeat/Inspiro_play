@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inspiro_play/screens/discover_screen.dart';
 import 'package:inspiro_play/screens/playing_music_screen.dart';
 import 'package:inspiro_play/screens/profile_screen.dart';
+import 'package:inspiro_play/screens/screen_layout.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -45,7 +46,7 @@ class WelcomeScreen extends StatelessWidget {
                               Text("Millions of Musics",
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 33,
+                                      fontSize: 32,
                                       color: Colors.white,
                                       fontFamily: 'Rubik')),
                               SizedBox(height: 5),
@@ -54,7 +55,7 @@ class WelcomeScreen extends StatelessWidget {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 18,
+                                      fontSize: 17,
                                       fontWeight: FontWeight.w300,
                                       fontFamily: 'Rubik')),
                             ],
@@ -74,7 +75,7 @@ class WelcomeScreen extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ProfileScreen()));
+                            builder: (context) => const ScreenLayout()));
                   },
                 ),
               ),

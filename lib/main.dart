@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:inspiro_play/screens/discover_screen.dart';
-import 'package:inspiro_play/screens/home_screen.dart';
-import 'package:inspiro_play/screens/model/screen_layout.dart';
-import 'package:inspiro_play/screens/playing_music_screen.dart';
-import 'package:inspiro_play/screens/profile_screen.dart';
-
+import 'package:inspiro_play/screens/screen_layout.dart';
 import 'package:inspiro_play/screens/welcome_screen.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -23,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: ScreenLayout(),
+      home: const WelcomeScreen()
     );
   }
 }

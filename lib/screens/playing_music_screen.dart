@@ -43,7 +43,7 @@ class _PlayingMusicScreenState extends State<PlayingMusicScreen> {
           children: [
             Center(
               child: Container(
-                  height: MediaQuery.of(context).size.height * 0.4,
+                  height: MediaQuery.of(context).size.height * 0.3,
                   width: MediaQuery.of(context).size.height * 0.4,
                   decoration: BoxDecoration(
                     color: Colors.green,

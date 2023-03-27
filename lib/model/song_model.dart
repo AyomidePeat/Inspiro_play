@@ -31,20 +31,36 @@ class Artist {
     return artists;
   }
 }
+
 class Playlist {
   final String name;
   final String image;
- Playlist({required this.image, required this.name});
+  final String artist;
+  Playlist({required this.image, required this.artist, required this.name});
 
   static List<Playlist> playlistFromSnapshot(List<dynamic> snapshot) {
     List<Playlist> playlist = [];
     for (var i in snapshot) {
       String name = i['track']['name'];
+      String artist = i['track']['album']['artists'][0]['name'];
       String image = i['track']['album']["images"][0]['url'];
-      playlist.add(Playlist(name: name, image: image));
+      playlist.add(Playlist(name: name, image: image, artist: artist));
     }
     return playlist;
   }
 }
 
- 
+class PlaylistTrack {
+  final String image;
+ final String name;
+  PlaylistTrack( {required this.name,required this.image});
+   static List<PlaylistTrack> playlistTrackFromSnapshot(List<dynamic> snapshot) {
+    List<PlaylistTrack> playlistTrack = [];
+    for (var i in snapshot) {
+       String name = i['track']['name'];
+      String image = i['track']['album']["images"][0]['url'];
+      playlistTrack.add(PlaylistTrack( image: image, name: name, ));
+    }
+    return playlistTrack;
+  }
+}
